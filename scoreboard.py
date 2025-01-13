@@ -1,6 +1,6 @@
 import pygame
 import sys
-import menu  # Asumo que aquí tienes la función menu()
+import menu
 
 # Starts pygame
 pygame.init()
@@ -26,21 +26,10 @@ font_menu = pygame.font.SysFont("fonts/donkey.ttf", 100)
 palm_image = pygame.image.load("imagenes/palmeras.png").convert_alpha()
 palm_image = pygame.transform.scale(palm_image, (WIDTH, HEIGHT))
 
-# Buttons
+# Button
 return_button = {"text": "Regresar", "pos": (WIDTH//2, 720)}
 
-# Función para dibujar un botón
-def draw_button(button):
-    mouse_pos = pygame.mouse.get_pos()
-    text_color = Tan
-    text_surface = font_menu.render(button["text"], True, text_color)
-    rect = text_surface.get_rect(center=button["pos"])
-    if rect.collidepoint(mouse_pos):
-        text_surface = font_menu.render(button["text"], True, ButtonHover)
-    SCREEN.blit(text_surface, rect.topleft)
-    return rect
-
-# Función para leer los primeros 3 lugares de un archivo txt
+# Function to read scores
 def read_scores(file_path):
     try:
         with open(file_path, "r", encoding="utf-8") as f:
@@ -52,9 +41,9 @@ def read_scores(file_path):
         print("Error leyendo archivo:", e)
         return []
 
-# Mostrar salón de la fama
+# Scoreboard
 def scoreboard():
-    scores = read_scores("scores/highscores.txt")  # Cambia con tu archivo
+    scores = read_scores("scores/highscores.txt")
     running = True
     while running:
         SCREEN.fill(Brown)
@@ -64,7 +53,7 @@ def scoreboard():
         title = font_title.render("Salón de la fama", True, Tan)
         SCREEN.blit(title, (WIDTH//2 - title.get_width()//2, 100))
 
-        # Mostrar los primeros 3 lugares
+        # Show names
         y_start = 300
         for i, (name, score) in enumerate(scores):
             text = f"{i+1}. {name} - {score}"
@@ -72,7 +61,7 @@ def scoreboard():
             SCREEN.blit(line, (WIDTH//2 - line.get_width()//2, y_start + i*100))
 
         # Draw return button
-        button_rect = draw_button(return_button)
+        button_rect = menu.draw_button(return_button)
 
         for event in pygame.event.get():
             if event.type == pygame.QUIT:
@@ -84,7 +73,7 @@ def scoreboard():
             elif event.type == pygame.MOUSEBUTTONDOWN and event.button == 1:
                 if button_rect.collidepoint(event.pos):
                     running = False
-                    menu.menu()  # Regresar al menú principal
+                    menu.menu()  # Return to menu
 
         pygame.display.flip()
         clock.tick(60)
