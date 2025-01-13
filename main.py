@@ -1,0 +1,3 @@
+import splash
+
+splash.main()
