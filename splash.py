@@ -70,7 +70,7 @@ def main():
             text_surface.blit(text_title, (0, 0))
         else:
             running = False
-            menu.mostrar_menu() # Start Menu
+            menu.menu() # Start Menu
 
         # Draw text
         text_surface.set_alpha(alpha)
