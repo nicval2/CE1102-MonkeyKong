@@ -79,16 +79,40 @@ def draw_platforms(x, y):
         SCREEN.blit(platform_image, (x, y))
         return 0
 
+# Player movement
+def movement(x, y):
+    if (974 == x and y == 680) or (1072 == x and y == 660) or (1176 == x and y == 640) or (1268 == x and y == 620) or (x == 484 and y == 430) or (x == 580 and y == 450) or (x == 680 and y == 470) or (x == 770 and y == 490):
+        y -= 20
+    if (972 == x  and y == 660) or (1070 == x  and y == 640) or (1162 == x  and y == 620) or (1256 == x  and y == 600) or (x == 504 and y == 410) or (x == 598 and y == 430) or (x == 700 and y == 450) or (x == 794 and y == 470):
+        y += 20  
+    return y
+
 
 # First Level
 def first_level():
     scores = read_scores("scores/highscores.txt")
     running = True
+    x = 450
+    #y = 680
+    y = 410
+    velocity = 2
     while running:
         SCREEN.fill(Brown)
         SCREEN.blit(palm_image, (0, 0))
-        SCREEN.blit(player_image, (450, 380))
+        SCREEN.blit(player_image, (x, y))
 
+        # Check movement in keyboard
+        key = pygame.key.get_pressed()
+        if key[pygame.K_LEFT] and x >= 430:
+            x -= velocity
+            print(x)
+        if key[pygame.K_RIGHT] and x <= 1350:
+            x += velocity
+            print(x)
+
+        y = movement(x, y)
+
+        # Draw platforms
         draw_platforms(400, 730) # Initial position
 
         # Draw title

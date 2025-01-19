@@ -1,6 +1,7 @@
 import pygame
 import sys
 import scoreboard
+import first_level
 
 # Starts pygame
 pygame.init()
@@ -72,6 +73,7 @@ def menu():
                 for i, rect in enumerate(button_rects):
                     if rect.collidepoint(event.pos):
                         if i == 0:
+                            first_level.first_level()
                             print("Nivel Uno seleccionado")
                         elif i == 1:
                             print("Nivel Dos seleccionado")
