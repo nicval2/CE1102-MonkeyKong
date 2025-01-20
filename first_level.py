@@ -93,9 +93,17 @@ def first_level():
     scores = read_scores("scores/highscores.txt")
     running = True
     x = 450
-    #y = 680
-    y = 410
+    y = 680
+    #y = 410
     velocity = 2
+
+    # Jump varieties
+    velocity_jump = 12
+    velocity_y = 0
+    gravity = 1
+    on_ground = True
+    y_initial = 100
+
     while running:
         SCREEN.fill(Brown)
         SCREEN.blit(palm_image, (0, 0))
@@ -111,6 +119,24 @@ def first_level():
             print(x)
 
         y = movement(x, y)
+
+        # Jump
+        if key[pygame.K_SPACE] and on_ground:
+            y_initial = y
+            velocity_y = -velocity_jump
+            on_ground = False
+
+
+
+        # Ground
+        if on_ground == False:
+            # Gravity
+            velocity_y += gravity
+            y += velocity_y
+            if y == y_initial:
+                y_initial = 0
+                velocity_y = 0
+                on_ground = True
 
         # Draw platforms
         draw_platforms(400, 730) # Initial position
