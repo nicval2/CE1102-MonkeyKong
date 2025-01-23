@@ -32,7 +32,7 @@ palm_image = pygame.transform.scale(palm_image, (WIDTH, HEIGHT))
 # Buttons
 menu_button = {"text": "Menú", "pos": (WIDTH//2 + 300, 700)}
 next_button = {"text": "Siguiente", "pos": (WIDTH//2 + 300, 600)}
-replay_button = {"text": "Otra vez", "pos": (WIDTH//2 - 300, 600)}
+replay_button = {"text": "Repetir", "pos": (WIDTH//2 - 300, 600)}
 scoreboard_button = {"text": "Salón de fama", "pos": (WIDTH//2 - 300, 700)}
 save_button = {"text": "Guardar nombre", "pos": (WIDTH//2, 450)}
 

@@ -64,10 +64,6 @@ def losing():
                 pygame.quit()
                 sys.exit()
             elif event.type == pygame.MOUSEBUTTONDOWN:
-                if input_rect.collidepoint(event.pos):
-                    active = True
-                else:
-                    active = False 
                 if event.button == 1:
                     if button_menu.collidepoint(event.pos):
                         running = False

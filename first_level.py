@@ -2,6 +2,7 @@ import pygame
 import sys
 import menu
 import winning
+import losing
 
 # Starts pygame
 pygame.init()
@@ -48,8 +49,17 @@ princess_image = pygame.transform.scale(princess_image, (50, 50))
 princess_image = pygame.transform.flip(princess_image, True, False)
 barrel_image = pygame.image.load("imagenes/Barrel.png").convert_alpha()
 barrel_image = pygame.transform.scale(barrel_image, (25,25))
-monkey_image = pygame.image.load("imagenes/Monkey_1.png").convert_alpha()
-monkey_image = pygame.transform.scale(monkey_image, (70, 70))
+barrel_images = []
+for i in range(0, 72):
+    x = 5*i
+    barrel_images += [pygame.transform.rotate(barrel_image, x)]
+
+print(len(barrel_images))
+monkey_image_1 = pygame.image.load("imagenes/Monkey_1.png").convert_alpha()
+monkey_image_1 = pygame.transform.scale(monkey_image_1, (70, 70))
+monkey_image_2 = pygame.image.load("imagenes/Monkey_2.png").convert_alpha()
+monkey_image_2 = pygame.transform.scale(monkey_image_2, (70, 70))
+monkey_image_2 = pygame.transform.flip(monkey_image_2, True, False)
 
 # Button
 return_button = {"text": "Regresar", "pos": (WIDTH//2, 860)}
@@ -76,11 +86,44 @@ def draw_ladders():
 
 # Player movement
 def movement(x, y):
-    if (974 == x and y == 680) or (1072 == x and y == 660) or (1176 == x and y == 640) or (1268 == x and y == 620) or (x == 484 and y == 430) or (x == 580 and y == 450) or (x == 680 and y == 470) or (x == 770 and y == 490):
+    if (963 == x and y == 680) or (1065 == x and y == 660) or (1164 == x and y == 640) or (1257 == x and y == 620) or (x == 492 and y == 430) or (x == 585 and y == 450) or (x == 681 and y == 470) or (x == 777 and y == 490):
         y -= 20
-    if (972 == x  and y == 660) or (1070 == x  and y == 640) or (1162 == x  and y == 620) or (1256 == x  and y == 600) or (x == 504 and y == 410) or (x == 598 and y == 430) or (x == 700 and y == 450) or (x == 794 and y == 470):
+    if (960 == x  and y == 660) or (1062 == x  and y == 640) or (1161 == x  and y == 620) or (1254 == x  and y == 600) or (x == 504 and y == 410) or (x == 591 and y == 430) or (x == 687 and y == 450) or (x == 792 and y == 470):
         y += 20  
     return y
+
+def draw_barrels(barrels):
+    new_barrels = []
+
+    for x,y,z in barrels:
+        if x != 470 and y == 325:
+            x -= 1
+            z += 1
+            if z == 72:
+                z = 0
+        elif (x == 470 and 325 <= y < 435) or (625 > y >= 515 and x == 1302):
+            y += 1
+        elif 515 >= y >= 435 and x != 1302:
+            if (x == 500 and 454 >= y >= 435) or (x == 600 and 474 >= y >= 455) or (x == 700 and 494 >= y >= 475) or (x == 800 and 514 >= y >= 495):
+                y += 1
+            else: 
+                x += 1
+                z -= 1
+                if z == -1:
+                    z = 71
+        elif 705 >= y >= 435 and x != 400:
+            if (x == 975 and 705 > y >= 685) or (x == 1075 and 685 >= y >= 665) or (x == 1175 and 665 >= y >= 645) or (x == 1275 and 645 >= y >= 625):
+                y += 1
+            else: 
+                x -= 1
+                z += 1
+                if z == 72:
+                    z = 0
+        SCREEN.blit(barrel_images[z], (x, y))
+        
+        new_barrels += [(x,y,z)]
+
+    return new_barrels
 
 
 # First Level
@@ -88,11 +131,11 @@ def first_level():
     running = True
     x = 450
     y = 680
-    velocity = 2
+    velocity = 3
     direction = 0
 
     # Jump varieties
-    velocity_jump = 12
+    velocity_jump = 17
     velocity_y = 0
     gravity = 1
     on_ground = True
@@ -107,19 +150,29 @@ def first_level():
     current_platform = 0
     next_highest_platform = 1
     n = 40
+    scored_jump = False
 
     # Barrel varieties
-
+    new_barrel = pygame.USEREVENT + 1
+    pygame.time.set_timer(new_barrel, 10000) 
+    barrels = []
+    monkey_change = 50
 
     while running:
         SCREEN.fill(Brown)
         SCREEN.blit(palm_image, (0, 0))
         SCREEN.blit(princess_image, (1200, 180))
-        SCREEN.blit(monkey_image, (1250, 284))
 
-        # Draw platforms and ladders
-        draw_platforms() 
+        if monkey_change < 50:
+            SCREEN.blit(monkey_image_2, (1250, 284))
+            monkey_change += 1
+        if monkey_change == 50:
+            SCREEN.blit(monkey_image_1, (1250, 284))
+
+        # Draw platforms, barrels and ladders
+        draw_platforms()
         draw_ladders()
+        barrels =  draw_barrels(barrels)
 
         # Check movement in keyboard
         key = pygame.key.get_pressed()
@@ -228,14 +281,29 @@ def first_level():
             n += 1
 
         # Winning screen
-
-        if x == 1166 and y == 180:
+        if x == 1167 and y == 180:
             running = False
             winning.winning(score)
 
-
         # Draw return button
         button_rect = menu.draw_button(return_button)
+
+        player_rect = pygame.Rect(x, y, 50, 50)
+
+        for bx, by, bz in barrels:
+            barrel_rect = pygame.Rect(bx, by, 25, 25)
+
+            # Colition
+            if player_rect.colliderect(barrel_rect):
+                running = False
+                menu.menu()
+
+            # Earn points
+            if not on_ground and not scored_jump:
+                if abs((x + 25) - (bx + 12)) < 20:
+                    if by > y + 40:
+                        score += 25
+                        scored_jump = True
 
         for event in pygame.event.get():
             if event.type == pygame.QUIT:
@@ -248,6 +316,11 @@ def first_level():
                 if button_rect.collidepoint(event.pos):
                     running = False
                     menu.menu()  # Return to menu
+            if event.type == new_barrel:
+                barrels += [(1230, 325, 0)]
+                print(barrels)
+                monkey_change = 0
+                
 
         pygame.display.flip()
         clock.tick(60)
