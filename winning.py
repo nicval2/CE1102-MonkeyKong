@@ -3,6 +3,8 @@ import sys
 import menu
 import first_level
 import scoreboard
+import second_level
+
 # Starts pygame
 pygame.init()
 
@@ -28,13 +30,6 @@ font_menu = pygame.font.SysFont("fonts/donkey.ttf", 50)
 # Load image
 palm_image = pygame.image.load("imagenes/palmeras.png").convert_alpha()
 palm_image = pygame.transform.scale(palm_image, (WIDTH, HEIGHT))
-
-# Buttons
-menu_button = {"text": "Menú", "pos": (WIDTH//2 + 300, 700)}
-next_button = {"text": "Siguiente", "pos": (WIDTH//2 + 300, 600)}
-replay_button = {"text": "Repetir", "pos": (WIDTH//2 - 300, 600)}
-scoreboard_button = {"text": "Salón de fama", "pos": (WIDTH//2 - 300, 700)}
-save_button = {"text": "Guardar nombre", "pos": (WIDTH//2, 450)}
 
 
 def save_score(path, name, score):
@@ -68,7 +63,7 @@ def save_score(path, name, score):
 
 
 # Scoreboard
-def winning(score):
+def winning(score, level):
     running = True
     path = "scores/highscores.txt"
     # Input box
@@ -80,6 +75,17 @@ def winning(score):
     name = ""
     label_name = ""
     saved = False
+
+    # Buttons
+    if level == 1:
+        next_button = {"text": "Siguiente", "pos": (WIDTH//2 + 300, 600)}
+        replay_button = {"text": "Repetir", "pos": (WIDTH//2 - 300, 600)}
+    else: 
+        next_button = {"text": "Repetir", "pos": (WIDTH//2 + 300, 600)}
+        replay_button = {"text": "Anterior", "pos": (WIDTH//2 - 300, 600)}
+    menu_button = {"text": "Menú", "pos": (WIDTH//2 + 300, 700)}
+    scoreboard_button = {"text": "Salón de fama", "pos": (WIDTH//2 - 300, 700)}
+    save_button = {"text": "Guardar nombre", "pos": (WIDTH//2, 450)}
 
     while running:
         SCREEN.fill(Brown)
@@ -126,6 +132,9 @@ def winning(score):
                     if button_replay.collidepoint(event.pos):
                         running = False
                         first_level.first_level()  
+                    if button_next.collidepoint(event.pos):
+                        running = False
+                        second_level.second_level() 
                     if button_scoreboard.collidepoint(event.pos):
                         running = False
                         scoreboard.scoreboard()

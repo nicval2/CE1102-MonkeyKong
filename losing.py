@@ -38,8 +38,17 @@ scoreboard_button = {"text": "Salón de fama", "pos": (WIDTH//2 - 300, 700)}
 
 
 # Scoreboard
-def losing():
+def losing(level):
     running = True
+    # Buttons
+    if level == 1:
+        next_button = {"text": "Siguiente", "pos": (WIDTH//2 + 300, 500)}
+        replay_button = {"text": "Repetir", "pos": (WIDTH//2 - 300, 500)}
+    else: 
+        next_button = {"text": "Repetir", "pos": (WIDTH//2 + 300, 500)}
+        replay_button = {"text": "Anterior", "pos": (WIDTH//2 - 300, 500)}
+    menu_button = {"text": "Menú", "pos": (WIDTH//2 + 300, 700)}
+    scoreboard_button = {"text": "Salón de fama", "pos": (WIDTH//2 - 300, 700)}
 
     while running:
         SCREEN.fill(Brown)

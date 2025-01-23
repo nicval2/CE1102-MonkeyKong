@@ -21,7 +21,7 @@ Tan = (222, 184, 135)
 ButtonHover = (200, 170, 120)
 
 # Fonts
-font_title = pygame.font.SysFont("fonts/donkey.ttf", 150)
+font_title = pygame.font.SysFont("fonts/donkey.ttf", 100)
 font_menu = pygame.font.SysFont("fonts/donkey.ttf", 100)
 font_score = pygame.font.SysFont("fonts/donkey.ttf", 50)
 font_points = pygame.font.SysFont("fonts/donkey.ttf", 30)
@@ -46,7 +46,6 @@ player_image_climb = pygame.image.load("imagenes/Mario_Climb.png").convert_alpha
 player_image_climb = pygame.transform.scale(player_image_climb, (50, 50))
 princess_image = pygame.image.load("imagenes/Princess.png").convert_alpha()
 princess_image = pygame.transform.scale(princess_image, (50, 50))
-princess_image = pygame.transform.flip(princess_image, True, False)
 barrel_image = pygame.image.load("imagenes/Barrel.png").convert_alpha()
 barrel_image = pygame.transform.scale(barrel_image, (25,25))
 barrel_images = []
@@ -59,16 +58,16 @@ monkey_image_1 = pygame.image.load("imagenes/Monkey_1.png").convert_alpha()
 monkey_image_1 = pygame.transform.scale(monkey_image_1, (70, 70))
 monkey_image_2 = pygame.image.load("imagenes/Monkey_2.png").convert_alpha()
 monkey_image_2 = pygame.transform.scale(monkey_image_2, (70, 70))
-monkey_image_2 = pygame.transform.flip(monkey_image_2, True, False)
 
 # Button
 return_button = {"text": "Regresar", "pos": (WIDTH//2, 860)}
 
 def draw_platforms():
-    platforms = [(900, 230), (1000, 230), (1100, 230), (1200, 230), (1300, 230),
-    (500, 350), (600, 350), (700, 350), (800, 350), (900, 350), (1000, 350), (1100, 350), (1200, 350), (1300, 350), 
-    (400, 460), (500, 480), (600, 500), (700, 520), (800, 540), (900, 540), (1000, 540), (1100, 540), (1200, 540), 
-    (1300, 650), (1200, 670), (1100, 690), (1000, 710), (900, 730), (800, 730), (700, 730), (600, 730), (500, 730), (400, 730)]
+    platforms = [(400, 130), (500, 130), (550, 130),
+    (400, 250), (500, 250), (600, 250), (700, 250), (800, 250), (900, 250), (1000, 250), (1100, 250), (1200, 250), (1300, 250), 
+    (500, 400), (600, 400), (700, 400), (800, 400), (900, 400), (1000, 400), (1100, 400), (1200, 400), (1300, 400), 
+    (400, 550), (500, 550), (600, 550), (700, 550), (800, 570), (900, 570), (1000, 570), (1100, 570), (1200, 570), 
+    (1300, 720), (1200, 720), (1100, 740), (1000, 740), (900, 760), (800, 760), (700, 760), (600, 760), (500, 760), (400, 760)]
 
     for x,y in platforms:
         SCREEN.blit(platform_image, (x, y))
@@ -76,9 +75,10 @@ def draw_platforms():
 
 
 def draw_ladders(): 
-    ladders = [(1000, 685), (1000, 660), (1000, 635), (1000, 610), (1000, 585), (1000, 560), (1000, 535), (1230, 645), (1230, 620), 
-    (1230, 595), (1230, 570), (1230, 545), (1230, 535), (510, 455), (510, 430), (510, 405), (510, 380), (510, 355), (510, 343), (1120, 225), 
-    (1120, 250), (1120, 275), (1120, 300), (1120, 325)]
+    ladders = [(1230, 695), (1230, 670), (1230, 645), (1230, 620), (1230, 595), (1230, 570), 
+    (495, 525), (495, 500), (495, 475), (495, 450), (495, 425), (495, 400),
+    (1295, 375), (1295, 350), (1295, 325), (1295, 300), (1295, 275), (1295, 250), 
+    (620, 225), (620, 200), (620, 175), (620, 150), (620, 125)]
 
     for x,y in ladders:
         SCREEN.blit(ladder_image, (x, y))
@@ -86,9 +86,9 @@ def draw_ladders():
 
 # Player movement
 def movement(x, y):
-    if (963 == x and y == 680) or (1065 == x and y == 660) or (1164 == x and y == 640) or (1257 == x and y == 620) or (x == 492 and y == 430) or (x == 585 and y == 450) or (x == 681 and y == 470) or (x == 777 and y == 490):
+    if (963 == x and y == 710) or (1173 == x and y == 690) or (x == 789 and y == 520):
         y -= 20
-    if (960 == x  and y == 660) or (1062 == x  and y == 640) or (1161 == x  and y == 620) or (1254 == x  and y == 600) or (x == 504 and y == 410) or (x == 591 and y == 430) or (x == 687 and y == 450) or (x == 792 and y == 470):
+    if (960 == x  and y == 690) or (1170 == x  and y == 670) or (x == 798  and y == 500):
         y += 20  
     return y
 
@@ -126,11 +126,11 @@ def draw_barrels(barrels):
     return new_barrels
 
 
-# First Level
-def first_level():
+# Second Level
+def second_level():
     running = True
     x = 450
-    y = 680
+    y = 710
     velocity = 3
     direction = 0
 
@@ -154,20 +154,20 @@ def first_level():
 
     # Barrel varieties
     new_barrel = pygame.USEREVENT + 1
-    pygame.time.set_timer(new_barrel, 10000) 
+    pygame.time.set_timer(new_barrel, 5000) 
     barrels = []
     monkey_change = 50
 
     while running:
         SCREEN.fill(Brown)
         SCREEN.blit(palm_image, (0, 0))
-        SCREEN.blit(princess_image, (1200, 180))
+        SCREEN.blit(princess_image, (420, 78))
 
         if monkey_change < 50:
-            SCREEN.blit(monkey_image_2, (1250, 284))
+            SCREEN.blit(monkey_image_2, (420, 183))
             monkey_change += 1
         if monkey_change == 50:
-            SCREEN.blit(monkey_image_1, (1250, 284))
+            SCREEN.blit(monkey_image_1, (420, 183))
 
         # Draw platforms, barrels and ladders
         draw_platforms()
@@ -197,30 +197,30 @@ def first_level():
         
 
         # Climbing up
-        if key[pygame.K_UP] and ((975 <= x <= 1010 and y == 660) or (1186 <= x <= 1248 and y == 620) or (476 <= x <= 524 and y == 430) or (1084 <= x <= 1136 and y == 300)):
+        if key[pygame.K_UP] and ((1186 <= x <= 1248 and y == 670) or (465 <= x <= 514 and y == 500) or (1257 <= x <= 1308 and y == 350) or (582 <= x <= 644 and y == 200)):
             going_up = True
             player_image = 20
             current_platform += 1
 
         if going_up == True:
-            if ((975 <= x <= 1010 or 1186 <= x <= 1248) and y >= 492):
+            if (1186 <= x <= 1248 and y > 520) or (465 <= x <= 514 and y > 350) or (1257 <= x <= 1308 and y > 200):
                 y -= 2
-            elif (476 <= x <= 524 and y >= 302) or (1084 <= x <= 1136 and y >= 182):
+            elif (582 <= x <= 644 and y > 80):
                 y -= 2
             else: 
                 going_up = False
                 player_image = 1
         
         # Climbing down
-        if key[pygame.K_DOWN] and ((975 <= x <= 1010 and y == 490) or (1186 <= x <= 1248 and y == 490) or (476 <= x <= 524 and y == 300) or (1084 <= x <= 1136 and y == 180)):
+        if key[pygame.K_DOWN] and ((1186 <= x <= 1248 and y == 520) or (465 <= x <= 514 and y == 350) or (1257 <= x <= 1308 and y == 200) or (582 <= x <= 644 and y == 75)):
             going_down = True
             player_image = 20
             current_platform -= 1
 
         if going_down == True:
-            if (975 <= x <= 1010 and y <= 658) or (1186 <= x <= 1248 and y <= 618):
+            if (1186 <= x <= 1248 and y < 670) or (465 <= x <= 514 and y < 500) or (1257 <= x <= 1308 and y < 350):
                 y += 2
-            elif (476 <= x <= 524 and y <= 428) or (1084 <= x <= 1136 and y <= 298):
+            elif (582 <= x <= 644 and y < 200):
                 y += 2
             else: 
                 going_down = False
@@ -263,12 +263,12 @@ def first_level():
                 on_ground = True
 
         # Draw title
-        title = font_title.render("Primer Nivel", True, Tan)
+        title = font_title.render("Segundo Nivel", True, Tan)
         SCREEN.blit(title, (WIDTH//2 - title.get_width()//2, 20))
 
         # Draw score
         score_label = font_score.render(f"Puntuación: {score}", True, Tan)
-        SCREEN.blit(score_label, (WIDTH//2 - score_label.get_width()//2, 130))
+        SCREEN.blit(score_label, (WIDTH//2 - score_label.get_width()//2, 90))
 
         # Earn points
         if next_highest_platform == current_platform:
@@ -281,9 +281,9 @@ def first_level():
             n += 1
 
         # Winning screen
-        if x == 1167 and y == 180:
+        if x == 459 and y == 80:
             running = False
-            winning.winning(score, 1)
+            winning.winning(score, 2)
 
         # Draw return button
         button_rect = menu.draw_button(return_button)
@@ -296,7 +296,7 @@ def first_level():
             # Colition
             if player_rect.colliderect(barrel_rect):
                 running = False
-                losing.losing(1)
+                losing.losing(2)
 
             # Earn points
             if not on_ground and not scored_jump:
@@ -317,7 +317,7 @@ def first_level():
                     running = False
                     menu.menu()  # Return to menu
             if event.type == new_barrel:
-                barrels += [(1230, 325, 0)]
+                #barrels += [(1230, 325, 0)]
                 print(barrels)
                 monkey_change = 0
                 

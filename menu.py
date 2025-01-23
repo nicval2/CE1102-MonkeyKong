@@ -2,6 +2,7 @@ import pygame
 import sys
 import scoreboard
 import first_level
+import second_level
 
 # Starts pygame
 pygame.init()
@@ -76,6 +77,7 @@ def menu():
                             first_level.first_level()
                             print("Nivel Uno seleccionado")
                         elif i == 1:
+                            second_level.second_level()
                             print("Nivel Dos seleccionado")
                         elif i == 2:
                             print("Salón de la fama seleccionado")
