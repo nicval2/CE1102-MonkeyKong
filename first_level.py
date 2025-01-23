@@ -21,6 +21,8 @@ ButtonHover = (200, 170, 120)
 # Fonts
 font_title = pygame.font.SysFont("fonts/donkey.ttf", 150)
 font_menu = pygame.font.SysFont("fonts/donkey.ttf", 100)
+font_score = pygame.font.SysFont("fonts/donkey.ttf", 50)
+font_points = pygame.font.SysFont("fonts/donkey.ttf", 30)
 
 # Load images
 palm_image = pygame.image.load("imagenes/palmeras.png").convert_alpha()
@@ -40,7 +42,13 @@ player_image_3 = pygame.transform.scale(player_image_3, (50, 50))
 player_image_3_flip = pygame.transform.flip(player_image_3, True, False)
 player_image_climb = pygame.image.load("imagenes/Mario_Climb.png").convert_alpha()
 player_image_climb = pygame.transform.scale(player_image_climb, (50, 50))
-
+princess_image = pygame.image.load("imagenes/Princess.png").convert_alpha()
+princess_image = pygame.transform.scale(princess_image, (50, 50))
+princess_image = pygame.transform.flip(princess_image, True, False)
+barrel_image = pygame.image.load("imagenes/Barrel.png").convert_alpha()
+barrel_image = pygame.transform.scale(barrel_image, (25,25))
+monkey_image = pygame.image.load("imagenes/Monkey_1.png").convert_alpha()
+monkey_image = pygame.transform.scale(monkey_image, (70, 70))
 
 # Button
 return_button = {"text": "Regresar", "pos": (WIDTH//2, 860)}
@@ -58,37 +66,16 @@ def read_scores(file_path):
         return []
 
 
-def draw_platforms(x, y):
-    if y == 730 and x < 900:
+def draw_platforms():
+    platforms = [(900, 230), (1000, 230), (1100, 230), (1200, 230), (1300, 230),
+    (500, 350), (600, 350), (700, 350), (800, 350), (900, 350), (1000, 350), (1100, 350), (1200, 350), (1300, 350), 
+    (400, 460), (500, 480), (600, 500), (700, 520), (800, 540), (900, 540), (1000, 540), (1100, 540), (1200, 540), 
+    (1300, 650), (1200, 670), (1100, 690), (1000, 710), (900, 730), (800, 730), (700, 730), (600, 730), (500, 730), (400, 730)]
+
+    for x,y in platforms:
         SCREEN.blit(platform_image, (x, y))
-        return draw_platforms(x + 100, y)
-    elif y > 620 and 900 <= x < 1300:
-        SCREEN.blit(platform_image, (x, y))
-        return draw_platforms(x + 100, y - 20)
-    elif y > 620 and 1300 <= x < 1400:
-        SCREEN.blit(platform_image, (x, y))
-        return draw_platforms(x - 100, 540)
-    elif y == 540 and 900 <= x < 1300:
-        SCREEN.blit(platform_image, (x, y))
-        return draw_platforms(x - 100, y)
-    elif y > 460 and x < 900:
-        SCREEN.blit(platform_image, (x, y))
-        return draw_platforms(x - 100, y - 20)
-    elif y == 460 and 400 == x:
-        SCREEN.blit(platform_image, (x, y))
-        return draw_platforms(x + 100, 350)
-    elif 260 < y < 360 and 400 < x < 1300:
-        SCREEN.blit(platform_image, (x, y))
-        return draw_platforms(x + 100, y)
-    elif 230 < y < 360 and x == 1300:
-        SCREEN.blit(platform_image, (x, y))
-        return draw_platforms(900, 230)
-    elif y == 230 and x < 1300:
-        SCREEN.blit(platform_image, (x, y))
-        return draw_platforms(x + 100, y)
-    else:
-        SCREEN.blit(platform_image, (x, y))
-        return 0
+    return 0
+
 
 def draw_ladders(): 
     ladders = [(1000, 685), (1000, 660), (1000, 635), (1000, 610), (1000, 585), (1000, 560), (1000, 535), (1230, 645), (1230, 620), 
@@ -128,14 +115,20 @@ def first_level():
     going_up = False
     going_down = False
 
+    score = 0
+    current_platform = 0
+    next_highest_platform = 1
+    n = 40
+
     while running:
         SCREEN.fill(Brown)
         SCREEN.blit(palm_image, (0, 0))
-        
-        # Draw platforms
-        draw_platforms(400, 730) # Initial position
-        draw_ladders()
+        SCREEN.blit(princess_image, (1200, 180))
+        SCREEN.blit(monkey_image, (1250, 284))
 
+        # Draw platforms and ladders
+        draw_platforms() 
+        draw_ladders()
 
         # Check movement in keyboard
         key = pygame.key.get_pressed()
@@ -163,7 +156,7 @@ def first_level():
         if key[pygame.K_UP] and ((975 <= x <= 1010 and y == 660) or (1186 <= x <= 1248 and y == 620) or (476 <= x <= 524 and y == 430) or (1084 <= x <= 1136 and y == 300)):
             going_up = True
             player_image = 20
-
+            current_platform += 1
 
         if going_up == True:
             if ((975 <= x <= 1010 or 1186 <= x <= 1248) and y >= 492):
@@ -178,7 +171,7 @@ def first_level():
         if key[pygame.K_DOWN] and ((975 <= x <= 1010 and y == 490) or (1186 <= x <= 1248 and y == 490) or (476 <= x <= 524 and y == 300) or (1084 <= x <= 1136 and y == 180)):
             going_down = True
             player_image = 20
-
+            current_platform -= 1
 
         if going_down == True:
             if (975 <= x <= 1010 and y <= 658) or (1186 <= x <= 1248 and y <= 618):
@@ -227,6 +220,21 @@ def first_level():
         # Draw title
         title = font_title.render("Primer Nivel", True, Tan)
         SCREEN.blit(title, (WIDTH//2 - title.get_width()//2, 20))
+
+        # Draw score
+        score_label = font_score.render(f"Puntuación: {score}", True, Tan)
+        SCREEN.blit(score_label, (WIDTH//2 - score_label.get_width()//2, 130))
+
+        # Earn points
+        if next_highest_platform == current_platform:
+            next_highest_platform += 1
+            score += 100
+            n = 0
+        if n < 40:
+            points = font_points.render("100", True, Tan)
+            SCREEN.blit(points, (x + 50, y - 50))
+            n += 1
+
 
         # Draw return button
         button_rect = menu.draw_button(return_button)
