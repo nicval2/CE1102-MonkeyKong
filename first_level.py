@@ -1,6 +1,7 @@
 import pygame
 import sys
 import menu
+import winning
 
 # Starts pygame
 pygame.init()
@@ -53,19 +54,6 @@ monkey_image = pygame.transform.scale(monkey_image, (70, 70))
 # Button
 return_button = {"text": "Regresar", "pos": (WIDTH//2, 860)}
 
-# Function to read scores
-def read_scores(file_path):
-    try:
-        with open(file_path, "r", encoding="utf-8") as f:
-            content = f.read().strip().split(",")
-            # Convertir a tuplas (nombre, puntuación)
-            scores = [(content[i], content[i+1]) for i in range(0, len(content), 2)]
-            return scores[:3]  # Solo los primeros 3 lugares
-    except Exception as e:
-        print("Error leyendo archivo:", e)
-        return []
-
-
 def draw_platforms():
     platforms = [(900, 230), (1000, 230), (1100, 230), (1200, 230), (1300, 230),
     (500, 350), (600, 350), (700, 350), (800, 350), (900, 350), (1000, 350), (1100, 350), (1200, 350), (1300, 350), 
@@ -97,7 +85,6 @@ def movement(x, y):
 
 # First Level
 def first_level():
-    scores = read_scores("scores/highscores.txt")
     running = True
     x = 450
     y = 680
@@ -115,10 +102,14 @@ def first_level():
     going_up = False
     going_down = False
 
+    # Score varietis
     score = 0
     current_platform = 0
     next_highest_platform = 1
     n = 40
+
+    # Barrel varieties
+
 
     while running:
         SCREEN.fill(Brown)
@@ -183,6 +174,7 @@ def first_level():
                 player_image = 1
 
 
+        # Player movement
         y = movement(x, y)
 
         if player_image == 0 or player_image == 1:
@@ -234,6 +226,12 @@ def first_level():
             points = font_points.render("100", True, Tan)
             SCREEN.blit(points, (x + 50, y - 50))
             n += 1
+
+        # Winning screen
+
+        if x == 1166 and y == 180:
+            running = False
+            winning.winning(score)
 
 
         # Draw return button

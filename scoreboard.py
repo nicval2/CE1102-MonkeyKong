@@ -33,7 +33,7 @@ return_button = {"text": "Regresar", "pos": (WIDTH//2, 720)}
 def read_scores(file_path):
     try:
         with open(file_path, "r", encoding="utf-8") as f:
-            content = f.read().strip().split(",")
+            content = f.read().strip().split(";")
             # Convertir a tuplas (nombre, puntuación)
             scores = [(content[i], content[i+1]) for i in range(0, len(content), 2)]
             return scores[:3]  # Solo los primeros 3 lugares

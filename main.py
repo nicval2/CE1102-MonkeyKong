@@ -1,6 +1,7 @@
 import splash
 import first_level
+import winning
 
-
-#plash.main()
-first_level.first_level()
+#splash.main()
+#first_level.first_level()
+winning.winning(300)
