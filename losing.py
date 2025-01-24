@@ -2,6 +2,7 @@ import pygame
 import sys
 import menu
 import first_level
+import second_level
 import scoreboard
 
 # Starts pygame
@@ -83,6 +84,9 @@ def losing(level):
                     if button_scoreboard.collidepoint(event.pos):
                         running = False
                         scoreboard.scoreboard()
+                    if button_next.collidepoint(event.pos):
+                        running = False
+                        second_level.second_level()
                     
 
         pygame.display.flip()

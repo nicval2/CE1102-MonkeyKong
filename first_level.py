@@ -94,6 +94,7 @@ def movement(x, y):
 
 def draw_barrels(barrels):
     new_barrels = []
+    adding = True
 
     for x,y,z in barrels:
         if x != 470 and y == 325:
@@ -119,9 +120,11 @@ def draw_barrels(barrels):
                 z += 1
                 if z == 72:
                     z = 0
-        SCREEN.blit(barrel_images[z], (x, y))
-        
-        new_barrels += [(x,y,z)]
+        if adding == True:
+            new_barrels += [(x,y,z)]
+            SCREEN.blit(barrel_images[z], (x, y))
+        else:
+            adding = True
 
     return new_barrels
 
@@ -155,7 +158,7 @@ def first_level():
     # Barrel varieties
     new_barrel = pygame.USEREVENT + 1
     pygame.time.set_timer(new_barrel, 10000) 
-    barrels = []
+    barrels = [(1230, 325, 0)]
     monkey_change = 50
 
     while running:
@@ -177,7 +180,10 @@ def first_level():
         # Check movement in keyboard
         key = pygame.key.get_pressed()
         if key[pygame.K_LEFT] and x >= 430:
-            x -= velocity
+            if x == 474 and y == 300:
+                x += 0
+            else:
+                x -= velocity
             direction = 1
             print("x =", x, "y =", y)
             if player_image == 5:
@@ -187,7 +193,10 @@ def first_level():
 
 
         if key[pygame.K_RIGHT] and x <= 1350:
-            x += velocity
+            if x == 1275 and y == 490:
+                x += 0
+            else:
+                x += velocity
             direction = 0
             print("x =", x, "y =", y)
             if player_image == 5:
@@ -276,9 +285,15 @@ def first_level():
             score += 100
             n = 0
         if n < 40:
-            points = font_points.render("100", True, Tan)
+            if scored_jump == True:
+                points = font_points.render("25", True, Tan)
+            else:
+                points = font_points.render("100", True, Tan)    
+
             SCREEN.blit(points, (x + 50, y - 50))
             n += 1
+        if n == 40:
+            scored_jump = False
 
         # Winning screen
         if x == 1167 and y == 180:
@@ -301,9 +316,10 @@ def first_level():
             # Earn points
             if not on_ground and not scored_jump:
                 if abs((x + 25) - (bx + 12)) < 20:
-                    if by > y + 40:
+                    if by > y + 80:
                         score += 25
                         scored_jump = True
+                        n = 0
 
         for event in pygame.event.get():
             if event.type == pygame.QUIT:

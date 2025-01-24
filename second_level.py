@@ -65,8 +65,8 @@ return_button = {"text": "Regresar", "pos": (WIDTH//2, 860)}
 def draw_platforms():
     platforms = [(400, 130), (500, 130), (550, 130),
     (400, 250), (500, 250), (600, 250), (700, 250), (800, 250), (900, 250), (1000, 250), (1100, 250), (1200, 250), (1300, 250), 
-    (500, 400), (600, 400), (700, 400), (800, 400), (900, 400), (1000, 400), (1100, 400), (1200, 400), (1300, 400), 
-    (400, 550), (500, 550), (600, 550), (700, 550), (800, 570), (900, 570), (1000, 570), (1100, 570), (1200, 570), 
+    (400, 400), (500, 400), (600, 400), (700, 400), (800, 400), (900, 400), (1000, 400), (1100, 400), (1200, 400), (1300, 400), 
+    (400, 550), (500, 550), (600, 550), (700, 550), (800, 570), (900, 570), (1000, 570), (1100, 570), (1200, 570), (1300, 570),
     (1300, 720), (1200, 720), (1100, 740), (1000, 740), (900, 760), (800, 760), (700, 760), (600, 760), (500, 760), (400, 760)]
 
     for x,y in platforms:
@@ -94,34 +94,32 @@ def movement(x, y):
 
 def draw_barrels(barrels):
     new_barrels = []
+    adding = True
 
     for x,y,z in barrels:
-        if x != 470 and y == 325:
+        
+        if (x != 1293 and y == 225) or (489 <= x <= 801 and y == 525) or (802 <= x <= 1224 and y == 545):
+            x += 1
+            z -= 1
+            if z == -1:
+                z = 71
+        elif (x == 1293 and 225 <= y < 375) or (x == 489 and y < 525) or (x == 802 and 525 <= y < 545) or (x == 1225 and 545 <= y < 690) or (x == 1170 and 690 <= y < 710) or (x == 969 and 710 <= y < 730):
+            y += 1
+        elif (x > 475 and y == 375) or (1170 < x <= 1225 and y == 690) or (969 < x <= 1170 and y == 710) or (450 < x <= 969 and y == 730) : 
             x -= 1
             z += 1
             if z == 72:
                 z = 0
-        elif (x == 470 and 325 <= y < 435) or (625 > y >= 515 and x == 1302):
-            y += 1
-        elif 515 >= y >= 435 and x != 1302:
-            if (x == 500 and 454 >= y >= 435) or (x == 600 and 474 >= y >= 455) or (x == 700 and 494 >= y >= 475) or (x == 800 and 514 >= y >= 495):
-                y += 1
-            else: 
-                x += 1
-                z -= 1
-                if z == -1:
-                    z = 71
-        elif 705 >= y >= 435 and x != 400:
-            if (x == 975 and 705 > y >= 685) or (x == 1075 and 685 >= y >= 665) or (x == 1175 and 665 >= y >= 645) or (x == 1275 and 645 >= y >= 625):
-                y += 1
-            else: 
-                x -= 1
-                z += 1
-                if z == 72:
-                    z = 0
-        SCREEN.blit(barrel_images[z], (x, y))
+        else: 
+            adding = False
+
+        if adding == True:
+            new_barrels += [(x,y,z)]
+            SCREEN.blit(barrel_images[z], (x, y))
+        else:
+            adding = True
         
-        new_barrels += [(x,y,z)]
+        
 
     return new_barrels
 
@@ -153,9 +151,9 @@ def second_level():
     scored_jump = False
 
     # Barrel varieties
-    new_barrel = pygame.USEREVENT + 1
-    pygame.time.set_timer(new_barrel, 5000) 
-    barrels = []
+    new_barrel = pygame.USEREVENT
+    pygame.time.set_timer(new_barrel, 1000) 
+    barrels = [(480, 225, 0)]
     monkey_change = 50
 
     while running:
@@ -276,9 +274,15 @@ def second_level():
             score += 100
             n = 0
         if n < 40:
-            points = font_points.render("100", True, Tan)
+            if scored_jump == True:
+                points = font_points.render("25", True, Tan)
+            else:
+                points = font_points.render("100", True, Tan)    
+
             SCREEN.blit(points, (x + 50, y - 50))
             n += 1
+        if n == 40:
+            scored_jump = False
 
         # Winning screen
         if x == 459 and y == 80:
@@ -301,10 +305,10 @@ def second_level():
             # Earn points
             if not on_ground and not scored_jump:
                 if abs((x + 25) - (bx + 12)) < 20:
-                    if by > y + 40:
+                    if by > y + 80:
                         score += 25
                         scored_jump = True
-
+                        n = 0
         for event in pygame.event.get():
             if event.type == pygame.QUIT:
                 pygame.quit()
@@ -317,9 +321,11 @@ def second_level():
                     running = False
                     menu.menu()  # Return to menu
             if event.type == new_barrel:
-                #barrels += [(1230, 325, 0)]
+                barrels += [(480, 225, 0)]
                 print(barrels)
                 monkey_change = 0
+                new_barrel = pygame.USEREVENT + 1
+                pygame.time.set_timer(new_barrel, 6000) 
                 
 
         pygame.display.flip()
