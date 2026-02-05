@@ -33,3 +33,16 @@ El jugador controla a un personaje que debe subir plataformas, usar escaleras, e
 * +100 puntos por subir a una nueva plataforma
 * +25 puntos por saltar un barril correctamente
 * Los mejores 3 puntajes se guardan en scores/highscores.txt
+
+
+## Anexos
+### Menú Principal
+<img width="959" height="538" alt="Screenshot 2026-02-05 114618" src="https://github.com/user-attachments/assets/d6c007ae-51e0-4758-b35d-c81af5ee14e4" />
+
+
+### Primer Nivel
+<img width="959" height="538" alt="Screenshot 2026-02-05 114628" src="https://github.com/user-attachments/assets/cdb1a788-b6aa-45d3-9d20-81dc766635d0" />
+
+
+### Segundo Nivel
+<img width="959" height="538" alt="Screenshot 2026-02-05 114639" src="https://github.com/user-attachments/assets/6076e53d-c05c-4624-bb2d-77a043ed5c46" />
